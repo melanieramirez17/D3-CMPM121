@@ -2,7 +2,7 @@
 // once, and the events it returns are a record of what happened. Whoever called
 // apply() decides how, or whether, to show them over time.
 
-import { isPassable, type Terrain, terrainAt } from "./terrain.ts";
+import { isPassable, type Terrain, terrainAt, yields } from "./terrain.ts";
 
 export type Cell = { x: number; y: number };
 
@@ -13,15 +13,21 @@ export type Direction = "north" | "south" | "east" | "west";
 export type GameState = {
   seed: number;
   player: Cell;
+  inventory: { item: string; amount: number }[];
+  changedCells: Cell[];
 };
 
 // Command: https://gameprogrammingpatterns.com/command.html
-export type Command = { type: "move"; direction: Direction };
+export type Command =
+  | { type: "move"; direction: Direction }
+  | { type: "gather"; cell: Cell };
 
 // Domain Event: https://martinfowler.com/eaaDev/DomainEvent.html
 export type GameEvent =
   | { type: "moved"; from: Cell; to: Cell }
-  | { type: "blocked"; at: Cell; toward: Cell; terrain: Terrain };
+  | { type: "blocked"; at: Cell; toward: Cell; terrain: Terrain }
+  | { type: "gathered"; yield: string; at: Cell }
+  | { type: "empty"; at: Cell };
 
 const STEPS: Record<Direction, Cell> = {
   north: { x: 0, y: -1 },
@@ -32,7 +38,7 @@ const STEPS: Record<Direction, Cell> = {
 
 // Singleton, avoided on purpose: tests make as many games as they need. https://gameprogrammingpatterns.com/singleton.html
 export function newGame(seed: number): GameState {
-  return { seed, player: { x: 0, y: 0 } };
+  return { seed, player: { x: 0, y: 0 }, inventory: [], changedCells: [] };
 }
 
 // The single way in. It updates the state it is given and returns the events.
@@ -40,6 +46,8 @@ export function apply(state: GameState, command: Command): GameEvent[] {
   switch (command.type) {
     case "move":
       return move(state, command.direction);
+    case "gather":
+      return gather(state, command.cell);
   }
 }
 
@@ -58,4 +66,35 @@ function move(state: GameState, direction: Direction): GameEvent[] {
   state.player.x = to.x;
   state.player.y = to.y;
   return [{ type: "moved", from, to }];
+}
+
+function isChanged(state: GameState, cell: Cell) {
+  for (const changed of state.changedCells) {
+    if (cell.x === changed.x && cell.y === changed.y) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function gather(state: GameState, cell: Cell): GameEvent[] {
+  if (isChanged(state, cell)) return [{ type: "empty", at: cell }];
+
+  const terrain = terrainAt(state.seed, cell.x, cell.y);
+  const yieldOptions = yields[terrain];
+  const randomYield =
+    yieldOptions[Math.floor(Math.random() * yieldOptions.length)];
+  let found = false;
+  for (const object of state.inventory) {
+    if (object.item === randomYield) {
+      object.amount += 1;
+      found = true;
+    }
+  }
+  if (found === false) state.inventory.push({ item: randomYield, amount: 1 });
+  console.log(state.inventory);
+
+  state.changedCells.push(cell);
+
+  return [{ type: "gathered", yield: randomYield, at: cell }];
 }

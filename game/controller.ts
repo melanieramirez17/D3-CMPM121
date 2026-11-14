@@ -38,6 +38,12 @@ export class Controller {
 
   private keyDown(event: KeyboardEvent) {
     const direction = ARROWS[event.key];
+
+    if (event.key === "g") {
+      this.pressed = { type: "gather", cell: this.state.player };
+      this.next();
+    }
+
     if (!direction || event.ctrlKey || event.metaKey || event.altKey) return;
     // Otherwise arrow keys would also scroll the page.
     event.preventDefault();

@@ -7,13 +7,14 @@ function element(id: string): HTMLElement {
 function describe(event: GameEvent): string {
   switch (event.type) {
     case "moved":
-      return `moved to ${event.to.x}, ${event.to.y}`;
+      return `Moved to ${event.to.x}, ${event.to.y}`;
     case "blocked":
-      return `blocked by ${event.terrain} at ${event.toward.x}, ${event.toward.y}`;
+      return `Blocked by ${event.terrain} at ${event.toward.x}, ${event.toward.y}`;
     case "gathered":
-      return `gathered item from ${event.yield} from ${event.at}`;
+      return `Gathered ${event.yield} from ${event.at.x}, ${event.at.y}`;
     case "empty":
-      return `could not gather item from ${event.at}. It is empty`;
+      return `Could not gather item from ${event.at.x},
+        ${event.at.y}. It is empty`;
   }
 }
 

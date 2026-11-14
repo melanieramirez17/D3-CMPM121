@@ -1,7 +1,7 @@
 // The world is a pure function of a seed and coordinates. Nothing here is stored,
 // so the world can be effectively unbounded while saved state stays small.
 
-export type Terrain = "grass" | "forest" | "water" | "rock";
+export type Terrain = "meadow" | "forest" | "water" | "snow";
 
 export function terrainAt(seed: number, x: number, y: number): Terrain {
   const raw = 0.65 * noise(seed, x, y, 9) + 0.35 * noise(seed + 1, x, y, 3);
@@ -9,12 +9,12 @@ export function terrainAt(seed: number, x: number, y: number): Terrain {
   // seeds would start inside a lake or walled into a pocket.
   const height = 0.5 + (raw - 0.5) * Math.min(1, Math.hypot(x, y) / 10);
   if (height < 0.3) return "water";
-  if (height > 0.7) return "rock";
-  return noise(seed + 2, x, y, 6) < 0.45 ? "forest" : "grass";
+  if (height > 0.7) return "snow";
+  return noise(seed + 2, x, y, 6) < 0.45 ? "forest" : "meadow";
 }
 
 export function isPassable(terrain: Terrain): boolean {
-  return terrain !== "water" && terrain !== "rock";
+  return terrain !== "water" && terrain !== "snow";
 }
 
 // Value noise: random numbers at coarse grid points, blended between them, so

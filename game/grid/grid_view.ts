@@ -13,10 +13,10 @@ const MARKER_COLOR = 0xf5e6a8;
 const BUMP_COLOR = 0xe0533d;
 
 const TERRAIN_COLORS: Record<Terrain, number> = {
-  grass: 0x5d9e4a,
-  forest: 0x2f6b3a,
-  water: 0x2d5f9e,
-  rock: 0x6e6a66,
+  meadow: 0x819E6E,
+  forest: 0x3C6B45,
+  water: 0x53A1C4,
+  snow: 0xD0E5EE,
 };
 
 // Enough cells to cover the view, plus a margin so that the camera can lag behind
@@ -151,7 +151,7 @@ export function startGridView(
       parent,
       width: VIEW_WIDTH,
       height: VIEW_HEIGHT,
-      backgroundColor: "#14161a",
+      backgroundColor: "#443f3b",
       banner: false,
       audio: { noAudio: true },
       input: { keyboard: false, mouse: false, touch: false, gamepad: false },

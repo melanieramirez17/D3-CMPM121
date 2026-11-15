@@ -78,9 +78,12 @@ function isChanged(state: GameState, cell: Cell) {
 }
 
 function gather(state: GameState, cell: Cell): GameEvent[] {
-  if (isChanged(state, cell)) return [{ type: "empty", at: cell }];
+  const cellCopy = { x: cell.x, y: cell.y };
+  if (isChanged(state, cellCopy)) {
+    return [{ type: "empty", at: { ...cellCopy } }];
+  }
 
-  const terrain = terrainAt(state.seed, cell.x, cell.y);
+  const terrain = terrainAt(state.seed, cellCopy.x, cellCopy.y);
   const yieldOptions = yields[terrain];
   const randomYield =
     yieldOptions[Math.floor(Math.random() * yieldOptions.length)];
@@ -94,7 +97,7 @@ function gather(state: GameState, cell: Cell): GameEvent[] {
   if (found === false) state.inventory.push({ item: randomYield, amount: 1 });
   console.log(state.inventory);
 
-  state.changedCells.push(cell);
+  state.changedCells.push(cellCopy);
 
-  return [{ type: "gathered", yield: randomYield, at: cell }];
+  return [{ type: "gathered", yield: randomYield, at: { ...cellCopy } }];
 }

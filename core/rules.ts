@@ -95,7 +95,6 @@ function gather(state: GameState, cell: Cell): GameEvent[] {
     }
   }
   if (found === false) state.inventory.push({ item: randomYield, amount: 1 });
-  console.log(state.inventory);
 
   state.changedCells.push(cellCopy);
 

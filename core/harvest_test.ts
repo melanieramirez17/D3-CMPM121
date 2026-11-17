@@ -48,3 +48,16 @@ Deno.test("a gather event keeps its cells while state moves on", () => {
     at: { x, y },
   }]);
 });
+
+Deno.test("a gather event keeps its inventory while state changes", () => {
+  const state = findTerrainBesidePassable("forest", true);
+  const first = apply(state, { type: "gather", cell: state.player });
+  apply(state, { type: "move", direction: "east" });
+  const event = first[0];
+
+  if (event.type !== "gathered") { // checks to make sure we can go on
+    throw new Error("Found no suitable cell on this row.");
+  }
+  apply(state, { type: "gather", cell: state.player });
+  assertEquals(event.inventory, [{ item: event.yield, amount: 1 }]);
+});

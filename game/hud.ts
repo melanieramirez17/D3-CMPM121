@@ -31,6 +31,15 @@ export class Hud {
   show(event: GameEvent) {
     element("live").textContent = describe(event);
     if (event.type === "moved") this.showPosition(event.to.x, event.to.y);
+    if (event.type === "gathered") {
+      const inventory = element("inventory");
+      inventory.textContent = "";
+      for (const { item, amount } of event.inventory) {
+        const inventoryItem = document.createElement("li");
+        inventoryItem.textContent = `${item}: ${amount}`;
+        inventory.append(inventoryItem);
+      }
+    }
   }
 
   private showPosition(x: number, y: number) {

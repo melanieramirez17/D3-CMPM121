@@ -3,6 +3,7 @@
 // apply() decides how, or whether, to show them over time.
 
 import { isPassable, type Terrain, terrainAt, yields } from "./terrain.ts";
+import { type Recipe } from "./recipe.ts";
 
 export type Cell = { x: number; y: number };
 
@@ -20,7 +21,8 @@ export type GameState = {
 // Command: https://gameprogrammingpatterns.com/command.html
 export type Command =
   | { type: "move"; direction: Direction }
-  | { type: "gather"; cell: Cell };
+  | { type: "gather"; cell: Cell }
+  | { type: "craft"; recipe: Recipe };
 
 // Domain Event: https://martinfowler.com/eaaDev/DomainEvent.html
 export type GameEvent =
@@ -32,7 +34,13 @@ export type GameEvent =
     at: Cell;
     inventory: { item: string; amount: number }[];
   }
-  | { type: "empty"; at: Cell };
+  | { type: "empty"; at: Cell }
+  | { type: "crafted"; craftedItem: string }
+  | {
+    type: "cantCraft";
+    recipe: string;
+    missing: { item: string; amount: number }[];
+  };
 
 const STEPS: Record<Direction, Cell> = {
   north: { x: 0, y: -1 },
@@ -53,6 +61,8 @@ export function apply(state: GameState, command: Command): GameEvent[] {
       return move(state, command.direction);
     case "gather":
       return gather(state, command.cell);
+    case "craft":
+      return craft(state, command.recipe);
   }
 }
 
@@ -82,6 +92,32 @@ function isChanged(state: GameState, cell: Cell) {
   return false;
 }
 
+function addToInventory(state: GameState, item: string, amount: number) {
+  let found = false;
+  for (const object of state.inventory) {
+    if (item === object.item) {
+      object.amount += amount;
+      found = true;
+    }
+  }
+  if (found === false) state.inventory.push({ item: item, amount: amount });
+}
+
+function removeFromInventory(state: GameState, item: string, amount: number) {
+  let foundItem;
+  for (const object of state.inventory) {
+    if (item === object.item) {
+      object.amount -= amount;
+      foundItem = object;
+      break;
+    }
+  }
+  // Remove object from inventory if the amount becomes 0 or less
+  if (foundItem && foundItem?.amount <= 0) {
+    state.inventory.splice(state.inventory.indexOf(foundItem), 1);
+  }
+}
+
 function gather(state: GameState, cell: Cell): GameEvent[] {
   const cellCopy = { x: cell.x, y: cell.y };
   if (isChanged(state, cellCopy)) {
@@ -92,15 +128,7 @@ function gather(state: GameState, cell: Cell): GameEvent[] {
   const yieldOptions = yields[terrain];
   const randomYield =
     yieldOptions[Math.floor(Math.random() * yieldOptions.length)];
-  let found = false;
-  for (const object of state.inventory) {
-    if (object.item === randomYield) {
-      object.amount += 1;
-      found = true;
-    }
-  }
-  if (found === false) state.inventory.push({ item: randomYield, amount: 1 });
-
+  addToInventory(state, randomYield, 1);
   state.changedCells.push(cellCopy);
 
   return [{
@@ -109,4 +137,38 @@ function gather(state: GameState, cell: Cell): GameEvent[] {
     at: { ...cellCopy },
     inventory: state.inventory.map((entry) => ({ ...entry })),
   }];
+}
+
+function getMissingItems(state: GameState, recipe: Recipe) {
+  const missing = [];
+  for (const recipeObj of recipe.itemsNeeded) {
+    let amountOwned = 0;
+    const owned = state.inventory.find((inventoryObj) =>
+      inventoryObj.item === recipeObj.item
+    );
+
+    // Check to make sure owned is not equal to undefined
+    if (owned) amountOwned = owned.amount;
+
+    if (amountOwned < recipeObj.amount) {
+      missing.push({
+        item: recipeObj.item,
+        amount: recipeObj.amount - amountOwned,
+      });
+    }
+  }
+  return missing;
+}
+
+function craft(state: GameState, recipe: Recipe): GameEvent[] {
+  const missing = getMissingItems(state, recipe);
+  // If there are no missing items
+  if (missing.length === 0) {
+    for (const recipeObj of recipe.itemsNeeded) {
+      removeFromInventory(state, recipeObj.item, recipeObj.amount);
+    }
+    addToInventory(state, recipe.craftedItem.item, recipe.craftedItem.amount);
+    return [{ type: "crafted", craftedItem: recipe.craftedItem.item }];
+  }
+  return [{ type: "cantCraft", recipe: recipe.name, missing: missing }];
 }

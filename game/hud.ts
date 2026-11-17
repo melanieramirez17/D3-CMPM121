@@ -15,6 +15,14 @@ function describe(event: GameEvent): string {
     case "empty":
       return `Could not gather item from ${event.at.x},
         ${event.at.y}. It is empty`;
+    case "crafted":
+      return `Crafted ${event.craftedItem}`;
+    case "cantCraft":
+      return `Could not craft ${event.recipe}. Need: ${
+        event.missing.map((missingObj) =>
+          `${missingObj.item}: ${missingObj.amount}`
+        ).join(", ")
+      }`;
   }
 }
 

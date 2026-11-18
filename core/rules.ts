@@ -100,13 +100,13 @@ export function addToInventory(state: GameState, item: string, amount: number) {
   let found = false;
   for (const object of state.inventory) {
     if (item === object.item) {
-      // Cap amount of each item at 99
-      object.amount = Math.min(object.amount + amount, 99);
+      // Cap amount of each item at 999
+      object.amount = Math.min(object.amount + amount, 999);
       found = true;
     }
   }
   if (found === false) {
-    state.inventory.push({ item: item, amount: Math.min(amount, 99) });
+    state.inventory.push({ item: item, amount: Math.min(amount, 999) });
   }
 }
 

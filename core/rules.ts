@@ -139,7 +139,7 @@ function gather(state: GameState, cell: Cell): GameEvent[] {
   }];
 }
 
-function getMissingItems(state: GameState, recipe: Recipe) {
+export function getMissingItems(state: GameState, recipe: Recipe) {
   const missing = [];
   for (const recipeObj of recipe.itemsNeeded) {
     let amountOwned = 0;

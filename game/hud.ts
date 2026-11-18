@@ -13,7 +13,7 @@ function describe(event: GameEvent): string {
     case "gathered":
       return `Gathered ${event.yield} from ${event.at.x}, ${event.at.y}`;
     case "empty":
-      return `Could not gather item from ${event.at.x},
+      return `Could not gather from ${event.at.x},
         ${event.at.y}. It is empty`;
     case "crafted":
       return `Crafted ${event.craftedItem}`;
@@ -39,7 +39,7 @@ export class Hud {
   show(event: GameEvent) {
     element("live").textContent = describe(event);
     if (event.type === "moved") this.showPosition(event.to.x, event.to.y);
-    if (event.type === "gathered") {
+    if (event.type === "gathered" || event.type === "crafted") {
       const inventory = element("inventory");
       inventory.textContent = "";
       for (const { item, amount } of event.inventory) {

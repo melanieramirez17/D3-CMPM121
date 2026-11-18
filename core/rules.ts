@@ -35,7 +35,11 @@ export type GameEvent =
     inventory: { item: string; amount: number }[];
   }
   | { type: "empty"; at: Cell }
-  | { type: "crafted"; craftedItem: string }
+  | {
+    type: "crafted";
+    craftedItem: string;
+    inventory: { item: string; amount: number }[];
+  }
   | {
     type: "cantCraft";
     recipe: string;
@@ -92,15 +96,18 @@ function isChanged(state: GameState, cell: Cell) {
   return false;
 }
 
-function addToInventory(state: GameState, item: string, amount: number) {
+export function addToInventory(state: GameState, item: string, amount: number) {
   let found = false;
   for (const object of state.inventory) {
     if (item === object.item) {
-      object.amount += amount;
+      // Cap amount of each item at 99
+      object.amount = Math.min(object.amount + amount, 99);
       found = true;
     }
   }
-  if (found === false) state.inventory.push({ item: item, amount: amount });
+  if (found === false) {
+    state.inventory.push({ item: item, amount: Math.min(amount, 99) });
+  }
 }
 
 function removeFromInventory(state: GameState, item: string, amount: number) {
@@ -168,7 +175,11 @@ function craft(state: GameState, recipe: Recipe): GameEvent[] {
       removeFromInventory(state, recipeObj.item, recipeObj.amount);
     }
     addToInventory(state, recipe.craftedItem.item, recipe.craftedItem.amount);
-    return [{ type: "crafted", craftedItem: recipe.craftedItem.item }];
+    return [{
+      type: "crafted",
+      craftedItem: recipe.craftedItem.item,
+      inventory: state.inventory.map((entry) => ({ ...entry })),
+    }];
   }
   return [{ type: "cantCraft", recipe: recipe.name, missing: missing }];
 }

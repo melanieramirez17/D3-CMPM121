@@ -34,8 +34,10 @@ export class RecipeBook {
       const missing = getMissingItems(this.state, recipes[i]);
       if (missing.length === 0) {
         this.buttonArray[i].textContent = `Craft ${recipes[i].name}`;
+        this.buttonArray[i].style.filter = "brightness(100%)";
       } else {
         this.buttonArray[i].textContent = `Cannot craft ${recipes[i].name}`;
+        this.buttonArray[i].style.filter = "brightness(70%)";
       }
     }
   }

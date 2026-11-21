@@ -24,7 +24,7 @@ export function findTerrainBesidePassable(
   passable: boolean,
 ): GameState {
   for (let x = 2; x < 10_000; x++) {
-    const east = isPassable(terrainAt(SEED, x + 1, 0));
+    const east = isPassable(terrainAt(SEED, x + 1, 0), []);
     const here = terrainAt(SEED, x, 0) === target;
     if (here && east === passable) {
       return {

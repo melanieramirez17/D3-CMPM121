@@ -10,6 +10,13 @@ export const yields = {
   snow: ["frozen berries"],
 };
 
+export const unlockedBy: Record<Terrain, string | null> = { // says what each terrain is unlocked by
+  meadow: null,
+  forest: null,
+  water: "raft",
+  snow: "scarf",
+};
+
 export function terrainAt(seed: number, x: number, y: number): Terrain {
   const raw = 0.65 * noise(seed, x, y, 9) + 0.35 * noise(seed + 1, x, y, 3);
   // Every game starts at the origin, so flatten the land there. Otherwise some
@@ -20,8 +27,16 @@ export function terrainAt(seed: number, x: number, y: number): Terrain {
   return noise(seed + 2, x, y, 6) < 0.45 ? "forest" : "meadow";
 }
 
-export function isPassable(terrain: Terrain): boolean {
-  return terrain !== "water" && terrain !== "snow";
+export function isPassable(
+  terrain: Terrain,
+  inventory: { item: string; amount: number }[],
+): boolean {
+  const opener = unlockedBy[terrain];
+  if (opener === null) {
+    return true;
+  } else {
+    return inventory.some((inv) => (inv.item === opener && inv.amount > 0));
+  }
 }
 
 // Value noise: random numbers at coarse grid points, blended between them, so

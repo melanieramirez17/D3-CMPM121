@@ -1,4 +1,9 @@
-import { type GameEvent, type GameState, terrainAt } from "../core/mod.ts";
+import {
+  type GameEvent,
+  type GameState,
+  terrainAt,
+  unlockedBy,
+} from "../core/mod.ts";
 
 function element(id: string): HTMLElement {
   return document.getElementById(id)!;
@@ -8,8 +13,13 @@ function describe(event: GameEvent): string {
   switch (event.type) {
     case "moved":
       return `Moved to ${event.to.x}, ${event.to.y}`;
-    case "blocked":
+    case "blocked": {
+      const opener = unlockedBy[event.terrain];
+      if (opener !== null) {
+        return `Blocked by ${event.terrain} at ${event.toward.x}, ${event.toward.y} (need ${opener})`;
+      }
       return `Blocked by ${event.terrain} at ${event.toward.x}, ${event.toward.y}`;
+    }
     case "gathered":
       return `Gathered ${event.yield} from ${event.at.x}, ${event.at.y}`;
     case "empty":

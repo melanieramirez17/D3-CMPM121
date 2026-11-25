@@ -59,7 +59,7 @@ Deno.test("all materials needed to craft are obtainable", () => {
   for (const recipe of recipes) {
     obtainableItems.push(recipe.craftedItem.item);
   }
-  // Check each ingredient in recipes and see if they are obtainable by crafting or gathering
+  // Check each ingredient in recipes and make sure they are obtainable by crafted or gathered materials
   for (const recipe of recipes) {
     for (const obj of recipe.itemsNeeded) {
       assert(obtainableItems.includes(obj.item));

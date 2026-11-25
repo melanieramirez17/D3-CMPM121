@@ -66,3 +66,18 @@ Deno.test("all materials needed to craft are obtainable", () => {
     }
   }
 });
+
+Deno.test("a crafted event you keep does not change after a later craft", () => {
+  const state = resetState();
+  // Choose first recipe in recipe list and add the required materials to inventory to craft it twice
+  const firstRecipe = recipes[0];
+  for (const ingredient of firstRecipe.itemsNeeded) {
+    addToInventory(state, ingredient.item, ingredient.amount * 2);
+  }
+  const craftedEvent = apply(state, { type: "craft", recipe: firstRecipe });
+  const craftedEventCopy = [...craftedEvent];
+
+  apply(state, { type: "craft", recipe: firstRecipe });
+
+  assertEquals(craftedEvent, craftedEventCopy);
+});

@@ -2,11 +2,15 @@ import { apply, type Command, type Direction } from "../core/mod.ts";
 import type { GameState } from "../core/mod.ts";
 import type { Presenter } from "./presenter.ts";
 
-const ARROWS: Record<string, Direction> = {
+const DIRECTIONS: Record<string, Direction> = {
   ArrowUp: "north",
   ArrowDown: "south",
   ArrowLeft: "west",
   ArrowRight: "east",
+  w: "north",
+  s: "south",
+  a: "west",
+  d: "east",
 };
 
 // Input in, core in the middle, presenter out. None of those three knows the others,
@@ -37,7 +41,7 @@ export class Controller {
   }
 
   private keyDown(event: KeyboardEvent) {
-    const direction = ARROWS[event.key];
+    const direction = DIRECTIONS[event.key];
 
     if (event.key === "g") {
       this.pressed = { type: "gather", cell: this.state.player };
@@ -55,7 +59,7 @@ export class Controller {
 
   private keyUp(event: KeyboardEvent) {
     this.held = this.held.filter((direction) =>
-      direction !== ARROWS[event.key]
+      direction !== DIRECTIONS[event.key]
     );
   }
 

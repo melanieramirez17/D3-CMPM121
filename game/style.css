@@ -134,6 +134,7 @@ body {
   color: var(--accent-color2);
   background-color: var(--text-color);
   border-radius: 6px;
+  border-width: 2px;
 }
 
 #recipe button:hover {

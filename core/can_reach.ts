@@ -1,7 +1,7 @@
-import { type Recipe, recipes } from "./recipe.ts";
+import { type Recipe } from "./recipe.ts";
 import { type Terrain, unlockedBy, yields } from "./terrain.ts";
 
-function canReach(recipes: Recipe[]) {
+export function canReach(recipes: Recipe[]) {
   const reached = new Set<string>();
   const made = new Set<Recipe>();
 

@@ -2,6 +2,7 @@ export type Recipe = {
   name: string;
   itemsNeeded: { item: string; amount: number }[];
   craftedItem: { item: string; amount: number };
+  capstone?: boolean;
 };
 
 export const recipes: Recipe[] = [
@@ -46,5 +47,14 @@ export const recipes: Recipe[] = [
       amount: 10,
     }, { item: "branch", amount: 10 }],
     craftedItem: { item: "winter food supply", amount: 1 },
+  },
+  {
+    name: "super ultra cozy winter",
+    itemsNeeded: [{ item: "winter food supply", amount: 1 }, {
+      item: "nest",
+      amount: 1,
+    }],
+    craftedItem: { item: "super ultra cozy winter", amount: 1 },
+    capstone: true,
   },
 ];

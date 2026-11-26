@@ -33,6 +33,8 @@ function describe(event: GameEvent): string {
           `${missingObj.item}: ${missingObj.amount}`
         ).join(", ")
       }`;
+    case "won":
+      return `You won! You have made the ingredients for a super cozy winter!`;
   }
 }
 

@@ -15,6 +15,7 @@ function resetState() {
     player: { x: 0, y: 0 },
     inventory: [],
     changedCells: [],
+    won: false,
   };
 
   return state;

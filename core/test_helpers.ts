@@ -14,6 +14,7 @@ export function findCellTerrain(target: Terrain): GameState {
         player: { x, y: 0 },
         inventory: [],
         changedCells: [],
+        won: false,
       };
     }
   }
@@ -32,6 +33,7 @@ export function findTerrainBesidePassable(
         player: { x, y: 0 },
         inventory: [],
         changedCells: [],
+        won: false,
       };
     }
   }

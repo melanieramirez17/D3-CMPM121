@@ -22,6 +22,7 @@ function besideBarrier(barrier: Terrain): GameState {
           player: { x, y },
           inventory: [],
           changedCells: [],
+          won: false,
         };
       }
     }

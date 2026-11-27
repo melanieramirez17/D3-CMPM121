@@ -45,7 +45,7 @@ export const recipes: Recipe[] = [
     }, {
       item: "seed",
       amount: 10,
-    }, { item: "branch", amount: 10 }],
+    }],
     craftedItem: { item: "winter food supply", amount: 1 },
   },
   {

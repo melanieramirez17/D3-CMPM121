@@ -10,6 +10,7 @@ Deno.test("won game", () => {
     state.inventory.push({ item, amount });
   }
   apply(state, { type: "craft", recipe: capstone });
+  assertEquals(state.won, true);
   const snapshot = JSON.parse(JSON.stringify(state));
   const move = apply(state, { type: "move", direction: "east" });
   const gather = apply(state, { type: "gather", cell: state.player });

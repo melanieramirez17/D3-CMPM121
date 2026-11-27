@@ -43,8 +43,8 @@ export function cantReach(recipes: Recipe[]) {
         }
       }
     }
-    // Filter out recipes that are in made and creates a new array with remaining recipes
-    const cannotCraft = recipes.filter((recipe) => !made.has(recipe));
-    return cannotCraft;
   }
+  // Filter out recipes that are in made and creates a new array with remaining recipes
+  const cannotCraft = recipes.filter((recipe) => !made.has(recipe));
+  return cannotCraft;
 }

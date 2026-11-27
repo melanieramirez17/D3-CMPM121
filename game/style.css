@@ -57,7 +57,7 @@ body {
   border-width: 4px;
 }
 
-#hud {
+.info {
   flex: 1 1 200px;
   max-width: 320px;
   display: flex;
@@ -74,19 +74,16 @@ body {
   outline-color: color-mix(var(--accent-color1) 60%, transparent);
 }
 
-#hud dl {
+.info dl {
   margin: 0;
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 2px 12px;
 }
 
-#hud dt {
-  color: var(--soft-accent);
-}
-
-#hud dd {
+.info dd {
   margin: 0;
+  color: var(--soft-accent);
 }
 
 #live {

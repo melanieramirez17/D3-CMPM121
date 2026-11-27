@@ -4,9 +4,27 @@ import {
   terrainAt,
   unlockedBy,
 } from "../core/mod.ts";
+import { recipes } from "../core/recipe.ts";
 
 function element(id: string): HTMLElement {
   return document.getElementById(id)!;
+}
+
+for (const recipe of recipes) {
+  const term = document.createElement("dt");
+  // Capitalize first letter of the recipe
+  let firstLetter = recipe.name[0];
+  firstLetter = firstLetter.toUpperCase();
+  const end = recipe.name.slice(1);
+  const name = firstLetter + end;
+
+  term.textContent = name;
+  element("recipesHud").append(term);
+  for (const item of recipe.itemsNeeded) {
+    const detail = document.createElement("dd");
+    detail.textContent = `${item.item}: ${item.amount}`;
+    element("recipesHud").append(detail);
+  }
 }
 
 function describe(event: GameEvent): string {
@@ -28,7 +46,7 @@ function describe(event: GameEvent): string {
     case "crafted":
       return `Crafted ${event.craftedItem}`;
     case "cantCraft":
-      return `Could not craft ${event.recipe}. Need: ${
+      return `Could not craft ${event.recipe}. Need ${
         event.missing.map((missingObj) =>
           `${missingObj.item}: ${missingObj.amount}`
         ).join(", ")

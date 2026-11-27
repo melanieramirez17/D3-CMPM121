@@ -13,7 +13,7 @@ export const recipes: Recipe[] = [
   },
   {
     name: "raft",
-    itemsNeeded: [{ item: "rope", amount: 10 }, { item: "branch", amount: 10 }],
+    itemsNeeded: [{ item: "rope", amount: 3 }, { item: "branch", amount: 10 }],
     craftedItem: { item: "raft", amount: 1 },
   },
   {
@@ -28,7 +28,7 @@ export const recipes: Recipe[] = [
     name: "nest",
     itemsNeeded: [
       { item: "grass", amount: 10 },
-      { item: "reeds", amount: 10 },
+      { item: "reeds", amount: 20 },
       {
         item: "flower",
         amount: 10,
@@ -39,7 +39,7 @@ export const recipes: Recipe[] = [
   },
   {
     name: "winter food supply",
-    itemsNeeded: [{ item: "frozen berries", amount: 10 }, {
+    itemsNeeded: [{ item: "frozen berries", amount: 20 }, {
       item: "acorn",
       amount: 10,
     }, {

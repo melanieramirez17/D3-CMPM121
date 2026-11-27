@@ -34,6 +34,7 @@ function describe(event: GameEvent): string {
         ).join(", ")
       }`;
     case "won":
+      document.getElementById("winBanner")!.hidden = false;
       return `You won! You have made the ingredients for a super cozy winter!`;
   }
 }

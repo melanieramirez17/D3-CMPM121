@@ -21,6 +21,23 @@ body {
   color: var(--accent-color1);
 }
 
+#winBanner {
+  margin: 0 auto;
+  text-align: center;
+  line-height: 50px;
+  width: 50%;
+  height: 50px;
+
+  color: var(--accent-color1);
+  border-radius: var(--border-radius);
+  background-color: #7b9779;
+  border-style: solid;
+
+  box-shadow: 0px 0px 15px #7b9779, 10px 10px 5px var(--accent-color2);
+
+  /* box-shadow: 10px 10px 10px var(--accent-color2); */
+}
+
 #app {
   display: flex;
   flex-wrap: wrap;

@@ -41,8 +41,8 @@ function describe(event: GameEvent): string {
     case "gathered":
       return `Gathered ${event.yield} from ${event.at.x}, ${event.at.y}`;
     case "empty":
-      return `Could not gather from ${event.at.x},
-        ${event.at.y}. It is empty`;
+      return `Can't gather from ${event.at.x},
+        ${event.at.y}. It's empty`;
     case "crafted":
       return `Crafted ${event.craftedItem}`;
     case "cantCraft":

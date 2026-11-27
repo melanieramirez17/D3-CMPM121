@@ -13,6 +13,7 @@ const MARKER_COLOR = 0xf5e6a8;
 const BUMP_COLOR = 0xe0533d;
 const COLLECT_COLOR = 0x0CE244;
 const COLLECT_MS = 70;
+const EMPTY_COLOR = 0xe0533d;
 
 const TERRAIN_COLORS: Record<Terrain, number> = {
   meadow: 0x819E6E,
@@ -85,9 +86,9 @@ export class GridView extends Phaser.Scene {
       case "blocked":
         return this.bump(event.at, event.toward);
       case "gathered":
-        return this.collect();
+        return this.flash(COLLECT_COLOR, COLLECT_MS);
       case "empty":
-        return Promise.resolve();
+        return this.flash(EMPTY_COLOR, COLLECT_MS);
       case "crafted":
         return Promise.resolve();
       case "cantCraft":
@@ -133,14 +134,14 @@ export class GridView extends Phaser.Scene {
   }
 
   // Gather animation
-  private collect(): Promise<void> {
-    this.marker.setFillStyle(COLLECT_COLOR);
+  private flash(color: number, duration: number): Promise<void> {
+    this.marker.setFillStyle(color);
     return new Promise((done) => {
       this.tweens.add({
         targets: this.marker,
         scale: 1.2,
         alpha: 0.1,
-        duration: COLLECT_MS,
+        duration: duration,
         yoyo: true,
         onComplete: () => {
           this.marker.setFillStyle(MARKER_COLOR);

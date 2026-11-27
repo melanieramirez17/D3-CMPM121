@@ -8,7 +8,7 @@ export type Recipe = {
 export const recipes: Recipe[] = [
   {
     name: "rope",
-    itemsNeeded: [{ item: "grass", amount: 10 }],
+    itemsNeeded: [{ item: "grass", amount: 5 }],
     craftedItem: { item: "rope", amount: 1 },
   },
   {
@@ -28,7 +28,7 @@ export const recipes: Recipe[] = [
     name: "nest",
     itemsNeeded: [
       { item: "grass", amount: 10 },
-      { item: "reeds", amount: 20 },
+      { item: "reeds", amount: 30 },
       {
         item: "flower",
         amount: 10,
@@ -39,7 +39,7 @@ export const recipes: Recipe[] = [
   },
   {
     name: "winter food supply",
-    itemsNeeded: [{ item: "frozen berries", amount: 20 }, {
+    itemsNeeded: [{ item: "frozen berries", amount: 30 }, {
       item: "acorn",
       amount: 10,
     }, {

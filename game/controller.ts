@@ -26,6 +26,7 @@ export class Controller {
   // to read the core here. During playback, the core is ahead of what the player
   // has seen, and reading it would show the future.
   onSettled: () => void = () => {};
+  readonly recorded: Command[] = [];
 
   constructor(state: GameState, presenter: Presenter) {
     this.state = state;
@@ -44,7 +45,7 @@ export class Controller {
     const direction = DIRECTIONS[event.key];
 
     if (event.key === "g") {
-      this.pressed = { type: "gather", cell: this.state.player };
+      this.pressed = { type: "gather", cell: { ...this.state.player } };
       this.next();
     }
 
@@ -77,8 +78,10 @@ export class Controller {
     // Playing nothing would report idle at once, and a held key would land back
     // here until the stack overflowed. No events means there is nothing to wait for.
     const events = apply(this.state, command);
+    this.recorded.push(command);
     if (events.length > 0) this.presenter.play(events);
   }
+
   public sendCrafting(command: Command) {
     this.pressed = command;
     this.next();

@@ -145,7 +145,7 @@ function gather(state: GameState, cell: Cell): GameEvent[] {
   const terrain = terrainAt(state.seed, cellCopy.x, cellCopy.y);
   const yieldOptions = yields[terrain];
   const randomYield =
-    yieldOptions[Math.floor(Math.random() * yieldOptions.length)];
+    yieldOptions[state.changedCells.length % yieldOptions.length];
   addToInventory(state, randomYield, 1);
   state.changedCells.push(cellCopy);
 

@@ -15,3 +15,11 @@ Deno.test("Replaying a recorded win returns won", () => {
   const { state } = runReplay();
   assertEquals(state.won, true);
 });
+
+Deno.test("the same seed and commands always give the same result", () => { // used similar structure to determinism_test.ts
+  const first = runReplay();
+  const start = Date.now();
+  while (Date.now() === start);
+  const second = runReplay();
+  assertEquals(first, second);
+});
